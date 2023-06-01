@@ -1,0 +1,4 @@
+
+.link {
+    @apply mb-0 pr-2 cursor-pointer block p-2;
+}
