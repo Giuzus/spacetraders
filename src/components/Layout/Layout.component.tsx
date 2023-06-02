@@ -10,7 +10,9 @@ function Layout(props: any) {
         <div className={theme}>
             <div className="bg-secondary text-primary dark:bg-secondary-dark h-screen dark:text-primary-dark">
                 <Header />
-                {props.children}
+                <main className="m-24">
+                    {props.children}
+                </main>
             </div>
         </div>
     );
