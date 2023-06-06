@@ -1,0 +1,4 @@
+
+interface Agent {
+    name: string
+}
