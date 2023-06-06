@@ -11,49 +11,63 @@ interface SetAgentsEvent {
   type: "SET_AGENTS",
   agents: Agent[]
 }
-interface SelectAgentEvent {
-  type: "SELECT",
+interface ActivateAgentEvent {
+  type: "ACTIVATE_AGENT",
   agentName: string
 }
-interface DeselectAgentEvent {
-  type: "DESELECT"
+interface DeactivateAgentEvent {
+  type: "DEACTIVATE_AGENT"
 }
 
-const agentsMachine = createMachine<AgentsContext, SetAgentsEvent | SelectAgentEvent | DeselectAgentEvent>({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEMYDsAusB0BXNsYANmAMYaQDEAygKIAytAwgCoDaADALqKgAOAe1gBLDMIFpeIAB6IAjAE4AbNgAsAVgDMcgEzqANCACe8hR2wdNS1UvXKdAdkcAOdQF83h1GEw58hEnIqOhYAfQBBAHFaADkWak4eJBBBETEJKVkEVR1DEwRnOWx1DlKOByUdBU0FDU0PL3QsbACyCggaBmZ2bilU0XFJZKzNTWdsJQUtXQNjeU0HYqsbO0qnB2cHBpBvXxbiNqoAEVo6RlZEvqEBjOHTFTqZvPmFJetbe3XXD08QNAEIHApLssFc0oNMogALRKZ4IGHbEF+AgHIIQME3IagLLqIqFPRwuTOHRqaaaHSVaq1LSIpo4VpojHpLEyRCjFRTbQEuYIRSaCzLD5rFzuH5AA */
+const agentsMachine = createMachine<AgentsContext,
+  SetAgentsEvent
+  | ActivateAgentEvent
+  | DeactivateAgentEvent
+>({
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMYDsAusDEBlAogCoD6AggOL4ByhuA2gAwC6ioADgPawCWG3HaViAAeiAIwBmAHQB2ACwA2GTLGSArHICcEgBxrNAGhABPcQzVSdCzTKULVEucrUBfF0dRhMsKVQ6kAYz4ANzBSdAxsUgBhQgBJADVSQnwyShpGFiQQTh4+ASFRBAkZHSkJACZ9BTU1CTEZCQY5I1MEMU0KqQU5BrV5BrkNWzcPCJ9AkLCI7AARfBj4pJS06kJMoVzefkFsorkGaWbrcxk1VTOK1sQ5OSktTUebMTlHCUcFUZBPbylJ7lC4S8kUWiWSqQoaw22S2+V2oCKMgqMnuOluYgYNkqYgU1wQt3uTx0Eh6t0e+jc7hAaA4EDgQh+WE2XG2BT2iAAtI4pFVKhUdFYhgx7C0TJzXlIGFKpcixMika4qYyfH5-oCIsy8jtCuJNGUhvV3mdMQwxGo8XKytVKioFMTDuYvsq-kEAdNgZrWfCRIgFCVZDpNHLmkjJApcWL2uGpA1NOHehVzE4xJSXEA */
   id: "agents",
+
   predictableActionArguments: true,
+
   context: {
     agents: [],
     activeAgent: undefined
   },
-  initial: "unselected",
-  states: {
-    unselected: {
-      on: {
-        SELECT: {
-          target: "selected",
-          actions: "selectAgent"
-        },
 
-        SET_AGENTS: {
-          actions: 'setAgents'
+  initial: "NoActiveAgent",
+
+  states: {
+    NoActiveAgent: {
+      on: {
+        ACTIVATE_AGENT: {
+          target: "ActiveAgent",
+          actions: "setActiveAgent"
         }
       }
     },
 
-    selected: {
+    ActiveAgent: {
       on: {
-        SELECT: {
-          target: "selected",
-          internal: true,
-          actions: 'selectAgent'
+        DEACTIVATE_AGENT: {
+          target: "NoActiveAgent",
+          actions: "removeActiveAgent"
         },
 
-        DESELECT: "unselected"
+        ACTIVATE_AGENT: {
+          target: "ActiveAgent",
+          internal: true,
+          actions: "setActiveAgent"
+        }
       }
     }
   },
+
+  on: {
+    SET_AGENTS: {
+      target: ".NoActiveAgent",
+      actions: "setAgents"
+    }
+  }
 }, {
   actions: {
     setAgents: assign({
@@ -61,9 +75,14 @@ const agentsMachine = createMachine<AgentsContext, SetAgentsEvent | SelectAgentE
         return event.agents
       }
     }),
-    selectAgent: assign({
-      activeAgent: ({ agents }, event: SelectAgentEvent) => {
+    setActiveAgent: assign({
+      activeAgent: ({ agents }, event: ActivateAgentEvent) => {
         return agents.find(a => a.name == event.agentName)
+      }
+    }),
+    removeActiveAgent: assign({
+      activeAgent: (_) => {
+        return undefined;
       }
     }),
   }
@@ -78,14 +97,19 @@ export const useAgents = (initialAgents: Agent[]) => {
     send({ type: "SET_AGENTS", agents: initialAgents });
   }, [send, initialAgents]);
 
-  const selectAgent = useCallback((name: string) => {
-    send({ type: "SELECT", agentName: name })
+  const activateAgent = useCallback((name: string) => {
+    send({ type: "ACTIVATE_AGENT", agentName: name })
+  }, [send])
+
+  const deactivateAgent = useCallback(() => {
+    send({ type: "DEACTIVATE_AGENT" })
   }, [send])
 
   return {
-    agentSelected: state.matches("selected"),
+    isAgentActive: state.matches("ActiveAgent"),
     agents: state.context.agents,
     activeAgent: state.context.activeAgent,
-    selectAgent
+    activateAgent,
+    deactivateAgent
   };
 }
