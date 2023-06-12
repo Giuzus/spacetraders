@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import Button from "../ui-elements/Button/Button.component";
-import { ThemeContext } from "../../Theme/Theme";
+import { Button } from "../ui-elements/Button/Button.component";
+import { ThemeContext } from "../../contexts/Theme";
 import { Link } from "react-router-dom";
 
 import './Header.styles.css'

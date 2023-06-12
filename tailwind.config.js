@@ -10,13 +10,13 @@ module.exports = {
         'secondary': '#ccc9d9',
         'accent': '#592d5c',
         'btn-primary': '#6a366d',
-        'brn-secondary': '#e6cfe7',
+        'btn-secondary': '#e6cfe7',
 
         'primary-dark': '#faf6fd',
         'secondary-dark': '#221e38',
         'accent-dark': '#e2b436',
         'btn-primary-dark': '#e2b436',
-        'brn-secondary-dark': '#f2f5fd',
+        'btn-secondary-dark': '#f2f5fd',
       }
     },
   },

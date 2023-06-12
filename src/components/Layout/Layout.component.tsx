@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import Header from "../Header/Header.component";
-import { ThemeContext } from "../../Theme/Theme";
+import { ThemeContext } from "../../contexts/Theme";
 
 function Layout(props: any) {
 

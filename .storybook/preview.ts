@@ -12,4 +12,19 @@ const preview: Preview = {
   },
 };
 
+
+export const globalTypes = {
+  scheme: {
+    name: "Scheme",
+    description: "Select light or dark theme",
+    defaultValue: "both",
+    toolbar: {
+      icon: "mirror",
+      items: ["both", "light", "dark"],
+      dynamicTitle: true
+    }
+  }
+}
+
+
 export default preview;

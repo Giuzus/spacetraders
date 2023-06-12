@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../Layout/Layout.component";
 import './Agents.styles.css'
-import Button from "../ui-elements/Button/Button.component";
+import { Button } from "../ui-elements/Button/Button.component";
 
 
 function Agents() {

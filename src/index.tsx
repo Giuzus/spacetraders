@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Agents from './components/Agents/Agents.component';
-import { ThemeProvider } from './Theme/Theme';
+import { ThemeProvider } from './contexts/Theme';
 
 const router = createBrowserRouter([
   {

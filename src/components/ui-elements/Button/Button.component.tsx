@@ -1,8 +1,25 @@
 import React from "react";
 import './Button.styles.css';
 
-function Button({ children, onClick }: any) {
-    return (<button type="button" className="btn btn-blue" onClick={onClick}>{children}</button>);
+interface ButtonProps {
+    primary?: boolean;
+    children: string;
+    onClick?: () => void;
 }
 
-export default Button;
+export const Button = ({
+    primary = false,
+    children,
+    ...props
+}: ButtonProps) => {
+    const mode = primary ? 'btn-primary' : 'btn-secondary';
+    return (
+        <button
+            type="button"
+            className={['btn', mode].join(' ')}
+            {...props}
+        >
+            {children}
+        </button>
+    );
+};
