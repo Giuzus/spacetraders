@@ -1,24 +1,23 @@
-export function withColorScheme(Story: any, context: any) {
+import { StoryContext, StoryFn } from "@storybook/react";
 
-    let { scheme } = context.globals;
+export function withColorScheme(Story: StoryFn, context: StoryContext) {
+  const { scheme } = context.globals;
 
-    return <div>
+  return (
+    <div>
+      {(scheme === "light" || scheme === "both") && (
+        <div>
+          <Story />
+        </div>
+      )}
 
-        {(scheme === "light" || scheme === "both") &&
-            <div>
-                <Story />
-            </div>
-        }
+      {scheme === "both" && <hr />}
 
-        {scheme === "both" &&
-            <hr />
-        }
-
-        {(scheme === "dark" || scheme === "both") &&
-            <div className='dark'>
-                <Story />
-            </div>
-        }
-
-    </div >
+      {(scheme === "dark" || scheme === "both") && (
+        <div className="dark">
+          <Story />
+        </div>
+      )}
+    </div>
+  );
 }

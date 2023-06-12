@@ -1,4 +1,3 @@
-
 interface Agent {
-    name: string
+  name: string;
 }
