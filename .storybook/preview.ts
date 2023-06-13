@@ -1,3 +1,4 @@
+import "../src/index.css";
 import type { Preview } from "@storybook/react";
 
 const preview: Preview = {
@@ -12,19 +13,17 @@ const preview: Preview = {
   },
 };
 
-
 export const globalTypes = {
-  scheme: {
-    name: "Scheme",
+  theme: {
+    name: "Theme",
     description: "Select light or dark theme",
-    defaultValue: "both",
+    defaultValue: "light",
     toolbar: {
       icon: "mirror",
-      items: ["both", "light", "dark"],
-      dynamicTitle: true
-    }
-  }
-}
-
+      items: ["light", "dark"],
+      dynamicTitle: true,
+    },
+  },
+};
 
 export default preview;

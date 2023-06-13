@@ -1,5 +1,4 @@
 import React from "react";
-import "./Button.styles.css";
 import cn from "classnames";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

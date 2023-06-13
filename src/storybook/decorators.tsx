@@ -1,23 +1,14 @@
 import { StoryContext, StoryFn } from "@storybook/react";
+import { useEffect } from "react";
 
 export function withColorScheme(Story: StoryFn, context: StoryContext) {
-  const { scheme } = context.globals;
+  const { theme } = context.globals;
 
-  return (
-    <div>
-      {(scheme === "light" || scheme === "both") && (
-        <div>
-          <Story />
-        </div>
-      )}
+  useEffect(() => {
+    document
+      .querySelector("html")
+      ?.setAttribute("data-theme", theme == "dark" ? "dracula" : "lemonade");
+  });
 
-      {scheme === "both" && <hr />}
-
-      {(scheme === "dark" || scheme === "both") && (
-        <div className="dark">
-          <Story />
-        </div>
-      )}
-    </div>
-  );
+  return <Story />;
 }

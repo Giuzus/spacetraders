@@ -6,13 +6,13 @@ import React, {
   SetStateAction,
 } from "react";
 
-interface IThemeContext {
+interface ThemeContextProps {
   theme: string;
   setTheme: Dispatch<SetStateAction<string>>;
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<IThemeContext>({} as IThemeContext);
+const ThemeContext = createContext<ThemeContextProps>({} as ThemeContextProps);
 
 const getTheme = () => {
   const theme = localStorage.getItem("theme");
@@ -21,7 +21,6 @@ const getTheme = () => {
       .matches
       ? "dark"
       : "light";
-    localStorage.setItem("theme", currentTheme);
     return currentTheme;
   } else {
     return theme;
@@ -40,11 +39,8 @@ const ThemeProvider = ({ children }: React.PropsWithChildren) => {
   }
 
   useEffect(() => {
-    const refreshTheme = () => {
-      localStorage.setItem("theme", theme);
-    };
-
-    refreshTheme();
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
